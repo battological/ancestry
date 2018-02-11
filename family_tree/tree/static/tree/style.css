@@ -1,0 +1,8 @@
+td {
+  padding: 0 10px;
+}
+
+.field {
+  border-right: 1px solid gray;
+  font-weight: bold;
+}

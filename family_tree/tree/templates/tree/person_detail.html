@@ -1,0 +1,103 @@
+{% extends 'tree/base.html' %}
+{% block content %}
+<h1>{{ person.first_name }} {% if person.middle_name %} {{ person.middle_name }} {% endif %} {{ person.last_name }}</h1>
+<div class='dates'>
+  <span class='birthdate'>{{ person.birthdate }}</span> -
+  <span class='deathdate'>{% if person.deathdate %}{{ person.deathdate }}{% else %}present{% endif %}</span>
+</div>
+<h2>Details</h2>
+<table>
+  <tr>
+    <td class='field'>Gender</td>
+    <td>{{ person.gender }}</td>
+  </tr>
+
+  {% for marriage in marriages %}
+  <tr>
+    <td class='field'>Spouse</td>
+    <td><a href='{% url "children" marriage.spouse.id %}'>{{ marriage.spouse.first_name }} {{ marriage.spouse.last_name }}</a></td>
+
+    {% if marriage.marriage_start_date %}
+    <td>Married: {{ marriage.marriage_start_date }}</td>
+    {% endif %}
+    {% if marriage.marriage_end_date %}
+    <td>Ended: {{ marriage.marriage_end_date }}</td>
+    {% endif %}
+  </tr>
+  {% endfor %}
+
+  {% for child in children %}
+  <tr>
+    <td class='field'>Child</td>
+    <td><a href='{% url "children" child.id %}'>{{ child.first_name }} {{ child.last_name }}</a></td>
+  </tr>
+  {% endfor %}
+
+  {% if person.father %}
+  <tr>
+    <td class='field'>Father</td>
+    <td><a href='{% url "children" person.father.id %}'>{% endif %}{{ person.father.first_name }} {{ person.father.last_name }}{% if person.father %}</a></td>
+  </tr>
+  {% endif %}
+
+  {% if person.mother %}
+  <tr>
+    <td class='field'>Mother</td>
+    <td><a href='{% url "children" person.mother.id %}'>{% endif %}{{ person.mother.first_name }} {{ person.mother.last_name }}{% if person.mother %}</a></td>
+  </tr>
+  {% endif %}
+
+  {% if person.burial_location %}
+  <tr>
+    <td class='field'>Burial Location</td>
+    <td>{{ person.burial_location }}
+  {% endif %}
+
+  {% if person.military_service %}
+  <tr>
+    <td class='field'>Military Service</td>
+    <td>{{ person.military_service }}
+  {% endif %}
+
+  {% if person.career %}
+  <tr>
+    <td class='field'>Career</td>
+    <td>{{ person.career }}
+  {% endif %}
+
+  {% if person.immigration %}
+  <tr>
+    <td class='field'>Immigration</td>
+    <td>Ship: {{ person.immigration.ship_name }}</td>
+    <td>Departure location: {{ person.immigration.ship_embarkation_location }}</td>
+    <td>Departure date: {{ person.immigration.ship_embarkation_date }}</td>
+    <td>Arrival location: {{ person.immigration.arrival_location }}</td>
+    <td>Arrival date: {{ person.immigration.arrival_date }}</td>
+  </tr>
+  {% endif %}
+
+  {% for residence in residences %}
+  <tr>
+    <td class='field'>Residence</td>
+    <td>{{ residence.where }}</td>
+    {% if residence.beginning or residence.ending %}<td>{% if residence.beginning %}{{ residence.beginning }}{% else %}?{% endif %}-{% if residence.ending %}{{ residence.ending }}{% else %}?{% endif %}</td>{% endif %}
+  </tr>
+  {% endfor %}
+
+  {% for school in schools %}
+  <tr>
+    <td class='field'>School</td>
+    {% if school.school_name %}<td>{{ school.school_name }}</td>{% endif %}
+    {% if school.school_location %}<td>{{ school.school_location }}</td>{% endif %}
+    {% if school.school_level %}<td>{{ school.school_level }}</td>{% endif %}
+    {% if school.degree_earned %}<td>{{ school.degree_earned }}</td>{% endif %}
+  </tr>
+  {% endfor %}
+</table>
+
+{% if person.other_notes %}
+<div id='other-notes'>
+  {{ person.other_notes }}
+</div>
+{% endif %}
+{% endblock %}
